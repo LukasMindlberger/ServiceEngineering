@@ -40,7 +40,7 @@
             blog.post = {};
         };
 
-        blog.addNewUser = function(){
+        blog.addNewUser = function () {
             alert("create user with: " + $scope.reg_user + " " + $scope.reg_fName + " " + $scope.reg_lName + " " + $scope.reg_password);
         };
 
