@@ -37,22 +37,22 @@
 		<div class="topbar">
       		<div class="container">
         		<div class="row">
-          			<div class="col-xs-6">
+          			<div class="col-xs-5">
           				<h1 ng-click="blog.selectTab('blog')">{{blog.title}}</h1>
           			</div>
-          			<div class="col-xs-6">
-            			<nav role='navigation' class="push-right">
+          			<div class="col-xs-4">
+            			<nav role='navigation' class="pull-left">
               				<ul>
               					<button class="btn btn-primary" ng-model="login" ng-click="blog.selectTab('login')">Login</button>
               					<button class="btn btn-primary" ng-model="newPost" ng-click="blog.selectTab('new')">Add new Post</button>
               					<button class="btn btn-primary" ng-model="showPosts" ng-click="blog.selectTab('blog')">Show Posts</button>
               				</ul>
             			</nav>
-          			</div>		
+          			</div>
           		</div>
           	</div>
         </div>
-        
+
         <div class="content">
         	<div class="container">
 				<!-- all posts -->
@@ -66,8 +66,8 @@
 								<p>Likes: {{post.likes}}</p></a>
         				</li>
 					</ul>
-					
-					
+
+
 					<div ng-repeat="post in blog.posts" ng-show="blog.isSelected($index)">
 						<div>
 							<h2>{{post.title}}</h2>
@@ -82,20 +82,28 @@
 						</div>
 					</div>
         		</div>
-				
-				<div ng-show="blog.isSelected('login')">
-					<h2>Login</h2>
-					<p>Username: <input type="text" ng-model="username"></input></p>
-					<p>Password: <input type="text" ng-model="password"></input></p>
-					<p>Not registrated? <!-- todo --></p>
-				</div>
-				
-				
+
 				<div ng-show="blog.isSelected('new')">
 					<h2>Add a new Post</h2><br>
 					<p>Title: <input type="text" ng-model="newTitle"></input></p>
-					<p>Content: <textarea ng-model="newContent" rows="5"></input></p>
+					<p>Content: <textarea ng-model="newContent" rows="5"></textarea></p>
 					<!-- todo -->
+				</div>
+
+				<div ng-show="blog.isSelected('login')">
+						<h2>Login</h2>
+						<p>Username: <input type="text" ng-model="username"></input></p>
+						<p>Password: <input type="text" ng-model="password"></input></p>
+						<button class="btn-default" ng-model="register" ng-click="blog.selectTab('register')">Not registered?</button>
+				</div>
+
+				<div ng-show="blog.isSelected('register')">
+					<h2>Register new user</h2>
+					<p>Username: <input id="input_user_reg" type="text" ng-model="reg_user"></p>
+					<p>First name: <input id="input_firstname_reg" type="text" ng-model="reg_fName"></p>
+					<p>Last name: <input id="input_lastname_reg" type="text" ng-model="reg_lName"></p>
+					<p>Password: <input id="input_password_reg" type="password" ng-model="reg_password"></p>
+					<button class="btn-default" ng-model="createUser" ng-click="blog.addNewUser()">Create User</button>
 				</div>
 				
 			</div>
