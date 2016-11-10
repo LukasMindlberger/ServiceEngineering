@@ -50,8 +50,7 @@ Simple blog front end demo in order to learn AngularJS - You can add new posts, 
     blog.members=["test"];
     
     blog.addMember = function(newMember){
-    	
-    	blog.member.push(newMember);
+    	blog.members.push(newMember);
     }
     
     

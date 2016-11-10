@@ -46,6 +46,7 @@
               					<button class="btn btn-primary" ng-model="login" ng-click="blog.selectTab('login')">Login</button>
               					<button class="btn btn-primary" ng-model="newPost" ng-click="blog.selectTab('new')">Add new Post</button>
               					<button class="btn btn-primary" ng-model="showPosts" ng-click="blog.selectTab('blog')">Show Posts</button>
+              					<button class="btn btn-primary" ng-model="createGroup" ng-click="blog.selectTab('newGroup')">Create Group</button>
               				</ul>
             			</nav>
           			</div>		
@@ -98,14 +99,16 @@
 					<p>Title: <input type="text" ng-model="blog.post.title"></p>
 					<p>Content: <textarea ng-model="blog.post.body" rows="5"></textarea></p>
 					<p>Private group: <input type="checkbox" ng-model="blog.privateGroup"></p>
-					<div ng-show="blog.privateGroup">
-						<p>Members:</p>
-						<div ng-repeat="mems in blog.members">{{mems}}</div>
-						<input type="text" ng-model="inputMember">
-						<button class="btn btn-primary" ng-model="addMember" ng-click="blog.addMember()">Add member</button>
-						
-					</div>
 					<!-- todo -->
+				</div>
+				
+				<div ng-show="blog.isSelected('newGroup)">
+					<h2>Create a new group</h2>
+					<p>Title: <input type="text" ng-model="newGroupTitle"></p>
+					<p>Members: <input type="text" ng-model="inputMember"></p>
+						<button class="btn btn-primary" ng-model="addMember" ng-click="blog.addMember(inputMember)">Add member</button>
+						<div ng-repeat="mems in blog.members">{{mems}}</div>
+						<!-- delete User -->
 				</div>
 				
 			</div>
