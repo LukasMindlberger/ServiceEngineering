@@ -1,14 +1,8 @@
-/*
-
-Simple blog front end demo in order to learn AngularJS - You can add new posts, add comments, and like posts.
-
-*/
-
 (function(){
   var app = angular.module('blogService',[]);
   
   
-  app.controller('BlogController', ['$scope', '$http', function($scope, $http){
+  app.controller('BlogController', ['$scope', '$http', '$window', function($scope, $http, $window){
     
     var blog = this;
     blog.title = "Really really cool blog service app";
@@ -37,24 +31,37 @@ Simple blog front end demo in order to learn AngularJS - You can add new posts, 
       blog.posts.unshift(this.post);
       blog.tab = 0;
       blog.post ={};
-      //to push
+      //to send
     };   
 
     blog.registrate = function(){
       blog.username = "";
       blog.password ="";
       blog.email = "";
-      //to push
+      //to send
     }
     
-    blog.members=["test"];
+    blog.members=[];
     
     blog.addMember = function(newMember){
     	blog.members.push(newMember);
+    	blog.newMember="";
+    	//to send
     }
     
     
-
+    blog.user="";
+    
+    blog.registrate = function(){
+    	if(blog.newUsername == null || blog.newPassword == null || blog.newPassword2 == null || blog.newEmail == null ){
+    		$window.alert("Please fill in required information!");
+    	}else if(blog.newPassword != blog.newPassword2){
+    		$window.alert("Passwords are not equal!");
+    	}else{
+    		$window.alert("Registration complete!");
+    	}
+    }
+    
 
   }]);
   
