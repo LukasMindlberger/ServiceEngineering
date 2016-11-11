@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <head>
 <link rel="stylesheet" type="text/css"
 	href="lib/bootstrap/dist/css/bootstrap.css">
@@ -43,11 +42,14 @@
           			<div class="col-xs-6">
             			<nav role='navigation' class="push-right">
               				<ul>
-              					<button class="btn btn-primary" ng-model="login" ng-click="blog.selectTab('login')" required>Login</button>
-              					<button class="btn btn-primary" ng-model="logout">Logout</button><br>
-              					<button class="btn btn-primary" ng-model="newPost" ng-click="blog.selectTab('new')">Add new Post</button>
-              					<button class="btn btn-primary" ng-model="showPosts" ng-click="blog.selectTab('blog')">Show Posts</button>
-              					<button class="btn btn-primary" ng-model="createGroup" ng-click="blog.selectTab('newGroup')">Create Group</button>
+              					<button class="btn btn-primary" ng-model="login" ng-click="blog.selectTab('login')" required>Login</button><br>
+								<div ng-show="blog.userLoggedIn">
+									<button class="btn btn-primary" ng-model="logout" ng-click="blog.userLogout()">Logout</button>
+									<button class="btn btn-primary" ng-model="newPost" ng-click="blog.selectTab('new')">Add new Post</button>
+									<button class="btn btn-primary" ng-model="showPosts" ng-click="blog.selectTab('blog')">Show Posts</button>
+									<button class="btn btn-primary" ng-model="createGroup" ng-click="blog.selectTab('newGroup')">Create Group</button>
+									<p>Logged in as: {{blog.currentUser.Name}}</p>
+								</div>
               				</ul>
             			</nav>
           			</div>		
@@ -87,32 +89,59 @@
 				
 				<div ng-show="blog.isSelected('login')">
 					<h2>Login</h2>
-					<p>Username: <input type="text" ng-model="username"></p>
-					<p>Password: <input type="text" ng-model="password"></p>
-					<button class="btn btn-primary" ng-model="loginButton" required>Login</button>
+					<p>Email: <input type="text" type="email" ng-model="blog.login.userEmailaddress"></p>
+					<p>Password: <input type="text" ng-model="blog.login.userPassword"></p>
+					<button class="btn btn-primary" ng-model="loginButton" ng-click="blog.userLogin()" required>Login</button>
 					<h2>Register</h2>
-					<p>Username: <input type="text" ng-model="blog.newUsername"></p>
-					<p>Password: <input type="password" ng-model="blog.newPassword"></p>
-					<p>Repeat password: <input type="password2" ng-model="blog.newPassword2"></p>
-					<p>Email Address: <input type="email" ng-model="blog.newEmail"></p>
-					<button class="btn btn-primary" ng-model="registerButton" ng-click="blog.registrate()">Register</button>
+					<p>Username: <input type="text" ng-model="username"></p>
+					<p>Password: <input type="password" ng-model="password"></p>
+					<p>Repeat password: <input type="password2" ng-model="password2"></p>
+					<p>Email Address: <input type="email" ng-model="email"></p>
+					<button class="btn btn-primary" ng-model="registerButton" ng-click="blog.registrate(username, password, password2, email)">Register</button>
 				</div>
 
-				<div ng-submit="blog.addPost()" ng-show="blog.isSelected('new')">
+
+
+				<div ng-show="blog.isSelected('new')">
 					<h2>Add a new Post</h2><br>
 					<p>Title: <input type="text" ng-model="blog.post.title"></p>
 					<p>Content: <textarea ng-model="blog.post.body" rows="5"></textarea></p>
-					<p>Private group: <input type="checkbox" ng-model="blog.privateGroup"></p>
+					<button class="btn btn-primary" ng-model="addPostButton" ng-click="blog.addPost()">Add</button>
 					<!-- todo -->
 				</div>
 				
 				<div ng-show="blog.isSelected('newGroup')">
 					<h2>Create a new group</h2>
 					<p>Title: <input type="text" ng-model="newGroupTitle"></p>
-					<p>Members: <input type="text" ng-model="blog.newMember"></p>
-						<button class="btn btn-primary" ng-model="addMember" ng-click="blog.addMember(blog.newMember)">Add member</button>
-						<div ng-repeat="mems in blog.members">{{mems}}</div>
-						<!-- delete User -->
+
+					<!--<p>Members: <input type="text" ng-model="blog.newMember"></p>-->
+					<p>Members: <label ng-model="currentMembers"><div ng-repeat="mems in blog.members">{{mems}}</div></label></p>
+
+					<!-- Add Member -->
+					<div class="btn-group" uib-dropdown is-open="blog.status.isopen">
+						<button id="single-button2" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+							Add member <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button2">
+							<div ng-repeat="mems in blog.allMembers" ng-click="blog.addMember(mems)">{{mems}}</div>
+						</ul>
+					</div>
+
+
+					<!-- Delete member -->
+					<div class="btn-group" uib-dropdown is-open="blog.status.isopen2">
+						<button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+							Delete member <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+							<div ng-repeat="mems in blog.members" ng-click="blog.deleteMember(mems)"> <i class ="glyphicon glyphicon-remove" style="font-size:18px; color:black;"></i>{{mems}}</div>
+						</ul>
+					</div>
+
+					<button class="btn btn-primary" ng-model="createGroup" ng-click="blog.createGroup()">Create</button>
+
+
+
 				</div>
 				
 				
