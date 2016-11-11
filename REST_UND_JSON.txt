@@ -1,0 +1,81 @@
+Benötigte REST Schnittstellen:
+
+/addUser	POST	User.json	StatusCode 200.OK oder 500.InternalServerError
+/login		POST	User.json	StatusCode 200.OK oder 401.Unauthorized
+
+/listUsers	POST	nichts		Users.json und StatusCode 200.OK
+
+/addGroup	POST	Group.json	StatusCode 200.OK oder 401.Unauthorized
+/listGroups	GET	Group.json	Liste der Gruppen oder 404.NotFound
+
+/createBlogentity POSt	BlogEntity.json	StatusCode 200.OK oder 401.Unauthorized			
+/getBlogEntities POST	User.json	blogEntities.json oder 404.NotFound
+
+/addComment	POST	Comment.json	StatusCode 200.OK oder 401.Unauthorized
+
+Benötigte JSON Objekte
+
+User.json
+{
+ "Name": "xx",
+ "Password": "xx",
+ "EMail": "xx"
+}
+
+Users.json
+[
+ {
+  "Name": "xx",
+  "Password": "xx",
+  "EMail": "xx"
+ }
+]
+
+Group.json
+{
+ "Name": "xx",
+ "Participants": [
+	{
+	 "Name": "xx"
+	}
+    ]
+}
+
+BlogEntity.json
+
+{
+ "Title": "xx",
+ "Text": "xx",
+ "Author": "xx",
+ "Date": "xx",
+ "GroupID": "xx"	
+}
+
+BlogEntities.json
+
+[
+    {
+	 "ID": "xx",
+	 "Title": "xx",
+ 	 "Text": "xx",
+	 "Author": "xx",
+	 "Date": "xx",
+	 "GroupID": "xx",
+	 "Comments": [
+     	{
+       		"Text": "xx",
+      		"Author": "xx",
+       		"Date": "xx"
+		}
+	]	
+    }
+]
+
+Comment.json
+
+{
+ "BlogEntityID": "xx",
+ "Text": "xx",
+ "Author": "xx",
+ "Date": "xx"
+}
