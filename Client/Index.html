@@ -42,7 +42,9 @@
           			<div class="col-xs-6">
             			<nav role='navigation' class="push-right">
               				<ul>
-              					<button class="btn btn-primary" ng-model="login" ng-click="blog.selectTab('login')" required>Login</button><br>
+								<div ng-show="!blog.userLoggedIn">
+              						<button class="btn btn-primary" ng-model="login" ng-click="blog.selectTab('login')" required>Login</button><br>
+								</div>
 								<div ng-show="blog.userLoggedIn">
 									<button class="btn btn-primary" ng-model="logout" ng-click="blog.userLogout()">Logout</button>
 									<button class="btn btn-primary" ng-model="newPost" ng-click="blog.selectTab('new')">Add new Post</button>
@@ -62,27 +64,27 @@
 				<!-- all posts -->
         		<div class="row">
         			<ul class="post-grid" ng-show="blog.isSelected('blog')">
-        				<li ng-repeat="post in blog.posts" class="col-s-4" ng-class="{ 'reset-s' : $index%3==0 }" ng-click="blog.selectTab($index)">
+        				<li ng-repeat="post in blog.posts" class="col-s-4" ng-class="{ 'reset-s' : $index%3==0 }" ng-click="blog.selectTab($index); blog.storeCurrentPost(post)">
 							<a>
-								<h3>{{post.title}}</h3>
-								<p>{{post.body[0] | limitTo:70}}</p>
-								<p>Comments: {{post.comments.length}}</p>
-								<p>Likes: {{post.likes}}</p></a>
+								<h3>{{post.Title}}</h3>
+								<p>{{post.Text | limitTo:70}}</p></a>
         				</li>
 					</ul>
 					
 					
 					<div ng-repeat="post in blog.posts" ng-show="blog.isSelected($index)">
 						<div>
-							<h2>{{post.title}}</h2>
-							<cite>by {{post.author}} on {{post.createdOn | date}}</cite>
-							<div class="post-body">
-								<p ng-repeat="text in post.body">{{text}}</p>
-								<h3>Comments: </h3>
-								<div ng-repeat="comment in post.comments">
-									{{comment.body}} - <cite>{{comment.author}}</cite>
-								</div>
+							<h2>{{post.Title}}</h2>
+							<cite>by {{post.AuthorName}} on {{post.Date | date}}</cite>
+							{{post.Text}}
+							<h3>Comments: </h3>
+							<div ng-repeat="comment in blog.comments">
+								{{comment.Text}} - <cite>{{comment.AuthorName}}</cite>
 							</div>
+
+							<br>
+							<h3>New comment:</h3> <input type="text" ng-model="blog.commentText">
+							<Button type="button" class="btn btn-primary" ng-click="blog.addComment()">Add comment</Button>
 						</div>
 					</div>
         		</div>
@@ -90,12 +92,12 @@
 				<div ng-show="blog.isSelected('login')">
 					<h2>Login</h2>
 					<p>Email: <input type="text" type="email" ng-model="blog.login.userEmailaddress"></p>
-					<p>Password: <input type="text" ng-model="blog.login.userPassword"></p>
+					<p>Password: <input type="password" ng-model="blog.login.userPassword"></p>
 					<button class="btn btn-primary" ng-model="loginButton" ng-click="blog.userLogin()" required>Login</button>
 					<h2>Register</h2>
 					<p>Username: <input type="text" ng-model="username"></p>
 					<p>Password: <input type="password" ng-model="password"></p>
-					<p>Repeat password: <input type="password2" ng-model="password2"></p>
+					<p>Repeat password: <input type="password" ng-model="password2"></p>
 					<p>Email Address: <input type="email" ng-model="email"></p>
 					<button class="btn btn-primary" ng-model="registerButton" ng-click="blog.registrate(username, password, password2, email)">Register</button>
 				</div>
@@ -104,26 +106,36 @@
 
 				<div ng-show="blog.isSelected('new')">
 					<h2>Add a new Post</h2><br>
-					<p>Title: <input type="text" ng-model="blog.post.title"></p>
-					<p>Content: <textarea ng-model="blog.post.body" rows="5"></textarea></p>
+					<p>Title: <input type="text" ng-model="blog.newPostTitle"></p>
+					<p>Content: <textarea ng-model="blog.newPostBody" rows="5"></textarea></p>
 					<button class="btn btn-primary" ng-model="addPostButton" ng-click="blog.addPost()">Add</button>
-					<!-- todo -->
+
+					<!-- showGroups -->
+					<div class="btn-group" uib-dropdown is-open="blog.status.isopen3">
+						<button id="single-button3" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled" ng-click="blog.getAllGroups()">Select Group <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button3">
+							<div ng-repeat="group in blog.allGroups" ng-click="blog.selectedGroup(group.Name)"> {{group.Name}}</div>
+						</ul>
+					</div>
+					<br>
+					<p>Selected Group: {{blog.createPostInGroup}}</p>
 				</div>
 				
 				<div ng-show="blog.isSelected('newGroup')">
 					<h2>Create a new group</h2>
-					<p>Title: <input type="text" ng-model="newGroupTitle"></p>
+					<p>Title: <input type="text" ng-model="blog.newGroupTitle"></p>
 
-					<!--<p>Members: <input type="text" ng-model="blog.newMember"></p>-->
-					<p>Members: <label ng-model="currentMembers"><div ng-repeat="mems in blog.members">{{mems}}</div></label></p>
+					<!-- Show all members -->
+					<p>Members: <label ng-model="currentMembers"><div ng-repeat="mems in blog.members">{{mems.Name}}</div></label></p>
 
 					<!-- Add Member -->
 					<div class="btn-group" uib-dropdown is-open="blog.status.isopen">
-						<button id="single-button2" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+						<button id="single-button2" type="button" ng-click="blog.getAllMembers()" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
 							Add member <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button2">
-							<div ng-repeat="mems in blog.allMembers" ng-click="blog.addMember(mems)">{{mems}}</div>
+							<div ng-repeat="mems in blog.allMembers" ng-click="blog.addMember(mems)">{{mems.Name}}</div>
 						</ul>
 					</div>
 
@@ -134,18 +146,13 @@
 							Delete member <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-							<div ng-repeat="mems in blog.members" ng-click="blog.deleteMember(mems)"> <i class ="glyphicon glyphicon-remove" style="font-size:18px; color:black;"></i>{{mems}}</div>
+							<div ng-repeat="mems in blog.members" ng-click="blog.deleteMember(mems)"> <i class ="glyphicon glyphicon-remove" style="font-size:18px; color:black;"></i>{{mems.Name}}</div>
 						</ul>
 					</div>
 
 					<button class="btn btn-primary" ng-model="createGroup" ng-click="blog.createGroup()">Create</button>
 
-
-
 				</div>
-				
-				
-				
 			</div>
         </div>
 	</div>
