@@ -1,0 +1,7 @@
+CREATE TABLE `users`.`Users` ( `Name` TEXT NOT NULL , `Password` TEXT NOT NULL , `EMail` TEXT NOT NULL , PRIMARY KEY (`EMail`(100))) ENGINE = InnoDB;
+
+CREATE TABLE `users`.`group` ( `Name` TEXT NOT NULL , `Participant` TEXT NOT NULL ) ENGINE = InnoDB;
+
+CREATE TABLE `users`.`blogentity` ( `ID` INT NOT NULL AUTO_INCREMENT , `Title` TEXT NOT NULL , `Text` TEXT NOT NULL , `AuthorMail` TEXT NOT NULL , `AuthorName` TEXT NOT NULL , `Date` DATE NOT NULL , `GroupID` TEXT NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
+
+CREATE TABLE `users`.`comments` ( `ID` INT NOT NULL AUTO_INCREMENT , `BlogID` INT NOT NULL , `Text` TEXT NOT NULL , `AuthorMail` TEXT NOT NULL , `AuthorName` TEXT NOT NULL , `Date` DATE NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
