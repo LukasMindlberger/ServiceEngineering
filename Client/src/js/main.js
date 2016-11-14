@@ -31,22 +31,27 @@
     
 
 
-    blog.registrate = function(username, password, password2, emailaddress){
-    	if(username == null || password == null || password2 == null || emailaddress == null ){
+    blog.registrate = function(){
+    	if(blog.usernameNew == null || blog.passwordNew == null || blog.password2New == null || blog.emailNew == null ){
     		$window.alert("Please fill in required information!");
-    	}else if(password != password2){
+    	}else if(blog.passwordNew != blog.password2New){
     		$window.alert("Passwords are not equal!");
     	}else{
 
             var user = {};
-            user.Name = username;
-            user.Password = password;
-            user.EMail = emailaddress;
+            user.Name = blog.usernameNew;
+            user.Password = blog.passwordNew;
+            user.EMail = blog.emailNew;
 
             $http.post(url+'/addUser', user)
                 .success(function(data) {
                   console.log(data);
+
                   $window.alert("Registration was successfull!");
+                    blog.usernameNew = "";
+                    blog.passwordNew = "";
+                    blog.password2New = "";
+                    blog.emailNew = "";
                 })
                 .error(function(data){
                   console.log(data);
@@ -120,6 +125,8 @@
         $http.post(url + '/addGroup', newGroup)
             .success(function (data) {
               $window.alert("Group created!");
+                blog.newGroupTitle = "";
+                blog.members = [];
             })
             .error(function (data) {
               $window.alert("Group not created, no members!");
@@ -208,6 +215,7 @@
         $http.post(url + '/addComment', comment)
             .success(function(data){
                 $window.alert("Comment added!");
+                blog.commentText = "";
                 blog.getComments();
             })
 

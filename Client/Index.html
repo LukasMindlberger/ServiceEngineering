@@ -95,11 +95,11 @@
 					<p>Password: <input type="password" ng-model="blog.login.userPassword"></p>
 					<button class="btn btn-primary" ng-model="loginButton" ng-click="blog.userLogin()" required>Login</button>
 					<h2>Register</h2>
-					<p>Username: <input type="text" ng-model="username"></p>
-					<p>Password: <input type="password" ng-model="password"></p>
-					<p>Repeat password: <input type="password" ng-model="password2"></p>
-					<p>Email Address: <input type="email" ng-model="email"></p>
-					<button class="btn btn-primary" ng-model="registerButton" ng-click="blog.registrate(username, password, password2, email)">Register</button>
+					<p>Username: <input type="text" ng-model="blog.usernameNew"></p>
+					<p>Password: <input type="password" ng-model="blog.passwordNew"></p>
+					<p>Repeat password: <input type="password" ng-model="blog.password2New"></p>
+					<p>Email Address: <input type="email" ng-model="blog.emailNew"></p>
+					<button class="btn btn-primary" ng-model="registerButton" ng-click="blog.registrate()">Register</button>
 				</div>
 
 
