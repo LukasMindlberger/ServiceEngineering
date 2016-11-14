@@ -76,7 +76,7 @@
 						<div>
 							<h2>{{post.Title}}</h2>
 							<cite>by {{post.AuthorName}} on {{post.Date | date}}</cite>
-							{{post.Text}}
+							<p>{{post.Text}}</p>
 							<h3>Comments: </h3>
 							<div ng-repeat="comment in blog.comments">
 								{{comment.Text}} - <cite>{{comment.AuthorName}}</cite>
