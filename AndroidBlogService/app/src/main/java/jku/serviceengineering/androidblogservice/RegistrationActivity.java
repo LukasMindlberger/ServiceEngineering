@@ -35,10 +35,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.io.IOException;
 import java.util.Map;
 
-import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -50,7 +48,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegistrationActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -69,18 +67,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserRegistrationTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mPasswordRepeatView;
     private View mProgressView;
     private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_registration);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -90,7 +89,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptRegistration();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mPasswordRepeatView = (EditText) findViewById(R.id.password_repeated);
+        mPasswordRepeatView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptRegistration();
                     return true;
                 }
                 return false;
@@ -101,16 +112,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        Button mCreateNewAccountButton = (Button) findViewById(R.id.create_account_button);
-        mCreateNewAccountButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createAccountIntent = new Intent(LoginActivity.this, RegistrationActivity.class);
-                LoginActivity.this.startActivity(createAccountIntent);
+                attemptRegistration();
             }
         });
 
@@ -167,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptRegistration() {
         if (mAuthTask != null) {
             return;
         }
@@ -175,15 +177,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
+        mPasswordRepeatView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String passwordRepeated = mPasswordRepeatView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check if repeated password equals first password.
+        if (!password.equals(passwordRepeated)) {
+            mPasswordRepeatView.setError(getString(R.string.error_passwords_do_not_match));
+            focusView = mPasswordRepeatView;
+            cancel = true;
+        }
+
+        // Check for a valid repeated password.
+        if (!TextUtils.isEmpty(passwordRepeated) && !isPasswordValid(passwordRepeated)) {
+            mPasswordRepeatView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordRepeatView;
+            cancel = true;
+        }
+
+        // Check for a valid password.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
@@ -209,7 +227,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserRegistrationTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -221,7 +239,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 2;
+        return password.length() > 3;
     }
 
     /**
@@ -294,6 +312,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(RegistrationActivity.this,
+                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+
+        mEmailView.setAdapter(adapter);
+    }
+
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -304,27 +332,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegistrationTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
 
-
-        UserLoginTask(String email, String password) {
+        UserRegistrationTask(String email, String password) {
             mEmail = email;
             mPassword = password;
         }
@@ -332,15 +349,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            //Attempt Log in on server
-            Map<String, String> userLoginData = new HashMap<>();
-            userLoginData.put("EMail", mEmail);
-            userLoginData.put("Password", mPassword);
-            JSONObject parameter = new JSONObject(userLoginData);
+            //Attempt account registration on server.
+
+
+
+
+
+
+
+            Map<String, String> userRegistrationData = new HashMap<>();
+            //Todo: GGf. noch Namensfeld für neuen User hinzufügen - Momentan ist Name = EMail
+            userRegistrationData.put("Name", mEmail);
+            userRegistrationData.put("Password", mPassword);
+            userRegistrationData.put("EMail", mEmail);
+
+            JSONObject parameter = new JSONObject(userRegistrationData);
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://192.168.1.105:8081/login") //Bei externem Gerät nicht 'localhost' oder '127.0.0.1' verwenden sondern IPv4 Addresse des Host Computers (Wenn in selbem Netzwerk)
+                    .url("http://192.168.1.105:8081/addUser") //Bei externem Gerät nicht 'localhost' oder '127.0.0.1' verwenden sondern IPv4 Addresse des Host Computers (Wenn in selbem Netzwerk)
                     .post(RequestBody.create(JSON, parameter.toString()))
                     .build();
 
@@ -352,7 +379,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 System.out.println(respCode + ": " + respBody);
 
-                if (respBody.equals("Unauthorized") || respCode != 200){
+                if (respBody.equals("InternalServerError") || respCode != 200){
                     return false;
                 }else if (respCode == 200){
                     return true;
@@ -371,11 +398,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                Intent successfulLoginIntent = new Intent(LoginActivity.this, MainActivity.class);
-                LoginActivity.this.startActivity(successfulLoginIntent);
+                Intent successfulRegistrationIntent = new Intent(RegistrationActivity.this, MainActivity.class);
+                RegistrationActivity.this.startActivity(successfulRegistrationIntent);
             } else {
-                mPasswordView.setError("The email address and/or password is incorrect");
-                mPasswordView.requestFocus();
+                mPasswordRepeatView.setError(getString(R.string.error_generic_server_error));
+                mPasswordRepeatView.requestFocus();
             }
         }
 

@@ -3,15 +3,20 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_generic_server_error">Oops. Something went wrong…</string>
+    <string name="error_passwords_do_not_match">The passwords do not match</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_registration">Sign Up</string>
+    <string name="promt_password_repeat">Password (repeat)</string>
+    <string name="action_create_account">Or Create A New Account</string>
 </resources>
