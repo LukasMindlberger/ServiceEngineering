@@ -58,7 +58,9 @@ app.post('/login', function (req, res) {
 	var user = req.body;
 	var mail = req.body.EMail;
 	var pw = req.body.Password;
-	
+
+	console.log(req.body);
+
 	con.query('SELECT * FROM users WHERE EMail = "' + mail + '" AND Password = "' + pw + '"' ,function(err, rows){
 		//TODO Error-Handling
 		if (rows.length !== 0){
