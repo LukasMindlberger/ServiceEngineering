@@ -340,7 +340,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://192.168.1.105:8081/login") //Bei externem Gerät nicht 'localhost' oder '127.0.0.1' verwenden sondern IPv4 Addresse des Host Computers (Wenn in selbem Netzwerk)
+                    .url("http://" + ((BlogApplication)getApplicationContext()).getIp() + ":" + ((BlogApplication)getApplicationContext()).getPort() + "/login") //Bei externem Gerät nicht 'localhost' oder '127.0.0.1' verwenden sondern IPv4 Addresse des Host Computers (Wenn in selbem Netzwerk)
                     .post(RequestBody.create(JSON, parameter.toString()))
                     .build();
 
@@ -355,6 +355,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (respBody.equals("Unauthorized") || respCode != 200){
                     return false;
                 }else if (respCode == 200){
+                    //User festlegen
+                    ((BlogApplication)getApplicationContext()).setUser(mEmail);
                     return true;
                 }
             } catch (Exception e) {

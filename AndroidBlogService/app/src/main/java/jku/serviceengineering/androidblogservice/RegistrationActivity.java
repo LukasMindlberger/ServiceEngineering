@@ -367,7 +367,7 @@ public class RegistrationActivity extends AppCompatActivity implements LoaderCal
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://192.168.1.105:8081/addUser") //Bei externem Gerät nicht 'localhost' oder '127.0.0.1' verwenden sondern IPv4 Addresse des Host Computers (Wenn in selbem Netzwerk)
+                    .url("http://" + ((BlogApplication)getApplicationContext()).getIp() + ":" + ((BlogApplication)getApplicationContext()).getPort() + "/addUser") //Bei externem Gerät nicht 'localhost' oder '127.0.0.1' verwenden sondern IPv4 Addresse des Host Computers (Wenn in selbem Netzwerk)
                     .post(RequestBody.create(JSON, parameter.toString()))
                     .build();
 

@@ -19,4 +19,5 @@
     <string name="title_activity_registration">Sign Up</string>
     <string name="promt_password_repeat">Password (repeat)</string>
     <string name="action_create_account">Or Create A New Account</string>
+    <string name="title_activity_create_group">CreateGroupActivity</string>
 </resources>

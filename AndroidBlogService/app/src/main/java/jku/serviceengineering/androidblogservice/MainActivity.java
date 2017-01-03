@@ -1,10 +1,14 @@
 package jku.serviceengineering.androidblogservice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,14 +20,47 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        System.out.println("Currently logged in: " + ((BlogApplication)getApplicationContext()).getUser());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_create_post:
+                //ToDo: Create Post
+
+                Snackbar.make(findViewById(android.R.id.content), "TODO: CREATE POSTING FUNCTIONALITY", Snackbar.LENGTH_LONG)
+                        .show();
+
+                return true;
+
+            case R.id.action_create_group:
+                Intent CreateGroupIntent = new Intent(MainActivity.this, CreateGroupActivity.class);
+                MainActivity.this.startActivity(CreateGroupIntent);
+                return true;
+
+            case R.id.action_sign_out:
+                ((BlogApplication)getApplicationContext()).userSignOut();
+                Intent LogInIntent = new Intent(MainActivity.this, LoginActivity.class);
+                LogInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                MainActivity.this.startActivity(LogInIntent);
+                finish();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 }
