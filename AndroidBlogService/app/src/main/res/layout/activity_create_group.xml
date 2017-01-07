@@ -29,6 +29,8 @@
             android:id="@+id/create_group_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="16dp">
 
             <LinearLayout
@@ -50,12 +52,19 @@
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:hint="Group name" />
-
                 </android.support.design.widget.TextInputLayout>
 
+                <Button
+                    android:id="@+id/add_users_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Add members"
+                    android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/email_sign_in_button"
+                    android:id="@+id/create_group_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

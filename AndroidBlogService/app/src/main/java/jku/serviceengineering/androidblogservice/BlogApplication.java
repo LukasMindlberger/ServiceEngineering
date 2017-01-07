@@ -8,7 +8,7 @@ import android.app.Application;
 
 public class BlogApplication extends Application {
     private String user;
-    private String ip = "192.168.1.105";
+    private String ip = "192.168.1.104";
     private String port = "8081";
 
     public String getPort() {
