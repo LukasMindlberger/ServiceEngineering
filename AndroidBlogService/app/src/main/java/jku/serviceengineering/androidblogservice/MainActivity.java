@@ -35,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.action_create_post:
-                //ToDo: Create Post
+                startActivity(new Intent(MainActivity.this, PostActivity.class));
 
-                Snackbar.make(findViewById(android.R.id.content), "TODO: CREATE POSTING FUNCTIONALITY", Snackbar.LENGTH_LONG)
-                        .show();
+
+
+
+
 
                 return true;
 

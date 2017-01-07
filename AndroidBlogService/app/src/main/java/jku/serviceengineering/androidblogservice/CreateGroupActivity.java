@@ -132,7 +132,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         groupJSON.put("Name", mGroupName);
         groupJSON.put("Participants", mGroupParticipants);
 
-        //Retrieve users from server
+        //Create new group
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("http://" + ((BlogApplication) getApplicationContext()).getIp() + ":" + ((BlogApplication) getApplicationContext()).getPort() + "/addGroup")
