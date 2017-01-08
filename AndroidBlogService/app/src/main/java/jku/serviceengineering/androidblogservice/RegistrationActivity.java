@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -80,6 +81,8 @@ public class RegistrationActivity extends AppCompatActivity implements LoaderCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        getSupportActionBar().setTitle("Sign up");
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -351,12 +354,6 @@ public class RegistrationActivity extends AppCompatActivity implements LoaderCal
 
             //Attempt account registration on server.
 
-
-
-
-
-
-
             Map<String, String> userRegistrationData = new HashMap<>();
             //Todo: GGf. noch Namensfeld für neuen User hinzufügen - Momentan ist Name = EMail
             userRegistrationData.put("Name", mEmail);
@@ -398,7 +395,7 @@ public class RegistrationActivity extends AppCompatActivity implements LoaderCal
 
             if (success) {
                 finish();
-                Intent successfulRegistrationIntent = new Intent(RegistrationActivity.this, MainActivity.class);
+                Intent successfulRegistrationIntent = new Intent(RegistrationActivity.this, LoginActivity.class);
                 RegistrationActivity.this.startActivity(successfulRegistrationIntent);
             } else {
                 mPasswordRepeatView.setError(getString(R.string.error_generic_server_error));

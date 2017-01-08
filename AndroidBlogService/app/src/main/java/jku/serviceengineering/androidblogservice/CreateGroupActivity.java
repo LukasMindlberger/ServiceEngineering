@@ -52,6 +52,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Create a group");
 
         //Retrieve users from server
         OkHttpClient client = new OkHttpClient();

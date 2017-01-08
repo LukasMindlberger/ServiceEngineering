@@ -139,33 +139,33 @@ app.post('/createBlogEntity', function(req, res){
 });
 
 app.post('/getBlogEntities', function(req, res){
-	var mail = req.body.EMail;
-	var blogEntities = [];
-	var counter = 0;
-	
-	con.query('SELECT DISTINCT users.group.Name, users.blogentity.ID, users.blogentity.Title, ' +
-			'users.blogentity.Text, users.blogentity.AuthorMail, users.blogentity.AuthorName, users.blogentity.Date, users.blogentity.GroupID ' +
-			'FROM users.group JOIN users.users ON users.group.Participant = users.users.EMail JOIN users.blogentity ' +
-			'ON users.group.Name = users.blogentity.GroupID ' +
-			'WHERE users.users.EMail = "' + mail + '"', function(err, result){
-		
-		for (var i in result){
-			var entity = {};
-			entity.ID = result[i].ID;
-			entity.Title = result[i].Title;
-			entity.Text = result[i].Text;
-			entity.AuthorMail = result[i].AuthorMail;
-			entity.AuthorName = result[i].AuthorName;
-			entity.Date = result[i].Date;
-			entity.GroupID = result[i].GroupID;
-			
-			blogEntities[counter] = entity;
-			counter++;
-		}
-		
-		console.log(blogEntities);
-		res.status(200).send(blogEntities);
-	});	
+    var mail = req.body.EMail;
+    var blogEntities = [];
+    var counter = 0;
+
+    con.query('SELECT DISTINCT users.group.Name, users.blogentity.ID, users.blogentity.Title, ' +
+        'users.blogentity.Text, users.blogentity.AuthorMail, users.blogentity.AuthorName, users.blogentity.Date, users.blogentity.GroupID ' +
+        'FROM users.group JOIN users.users ON users.group.Participant = users.users.EMail JOIN users.blogentity ' +
+        'ON users.group.Name = users.blogentity.GroupID ' +
+        'WHERE users.users.EMail = "' + mail + '"', function(err, result){
+
+        for (var i in result){
+            var entity = {};
+            entity.ID = result[i].ID;
+            entity.Title = result[i].Title;
+            entity.Text = result[i].Text;
+            entity.AuthorMail = result[i].AuthorMail;
+            entity.AuthorName = result[i].AuthorName;
+            entity.Date = result[i].Date;
+            entity.GroupID = result[i].GroupID;
+
+            blogEntities[counter] = entity;
+            counter++;
+        }
+
+        console.log(blogEntities);
+        res.status(200).send(blogEntities);
+    });
 });
 
 

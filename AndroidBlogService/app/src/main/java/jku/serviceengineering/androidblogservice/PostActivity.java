@@ -2,6 +2,7 @@ package jku.serviceengineering.androidblogservice;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Create a post");
 
         mPostTitle = (EditText) findViewById(R.id.titleField);
         mPostDesc = (EditText) findViewById(R.id.descField);
@@ -83,7 +85,7 @@ public class PostActivity extends AppCompatActivity {
                 System.out.println(response.code() + ": " + respBody);
 
                 //public = default group
-                groupList.add("public");
+                //groupList.add("public");
                 try {
                     JSONArray users = new JSONArray(respBody);
                     for (int i = 0; i < users.length(); i++) {
@@ -118,7 +120,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void startPosting() {
-        ProgressDialog progress = ProgressDialog.show(this, "Uploading", "Uploading Post...", true);
+        final ProgressDialog progress = ProgressDialog.show(this, "Uploading", "Uploading Post...", true);
 
         String title_val = mPostTitle.getText().toString().trim();
         String desc_val = mPostDesc.getText().toString().trim();
@@ -152,6 +154,8 @@ public class PostActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     Snackbar.make(findViewById(android.R.id.content), "Post uploaded", Snackbar.LENGTH_LONG).show();
+                    progress.dismiss();
+                    startActivity(new Intent(PostActivity.this, MainActivity.class));
                 }
             });
 
