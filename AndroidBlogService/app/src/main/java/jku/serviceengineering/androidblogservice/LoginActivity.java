@@ -38,6 +38,7 @@ import java.util.List;
 import java.io.IOException;
 import java.util.Map;
 
+import jku.serviceengineering.androidblogservice.tools.MD5Hasher;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -327,7 +328,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         UserLoginTask(String email, String password) {
             mEmail = email;
-            mPassword = password;
+            mPassword = MD5Hasher.calcMD5(password);
         }
 
         @Override
