@@ -4,6 +4,7 @@ var app = express();
 var fs = require("fs");
 var myParser = require("body-parser");
 var cors = require('cors');
+var md5 = require('./MD5Generator');
 
 app.use(cors());
 app.use(myParser.json());
@@ -60,6 +61,7 @@ app.post('/login', function (req, res) {
 	var pw = req.body.Password;
 
 	console.log(req.body);
+	console.log(md5.getMD5For(pw));
 
 	con.query('SELECT * FROM users WHERE EMail = "' + mail + '" AND Password = "' + pw + '"' ,function(err, rows){
 		//TODO Error-Handling
